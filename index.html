@@ -407,19 +407,18 @@
 
       
         
-          
-            <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>因为自己在学习使用flex&amp;bison编写编译器时，困难很大，网上的资料很老很陈旧，很多示例代码都无法运行。幸而自己最终找到一份07年的博客，所以想对其整理一下。一来加深自己的理解，为学弟学妹提供一份参考资料，二来也能防止原博客丢失。</p>
+          <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>因为自己在学习使用flex&amp;bison编写编译器时，困难很大，网上的资料很老很陈旧，很多示例代码都无法运行。幸而自己最终找到一份07年的博客，所以想对其整理一下。一来加深自己的理解，为学弟学妹提供一份参考资料，二来也能防止原博客丢失。</p>
 <p>flex是lex的加强版，同样bison也是yacc的加强版，lex和yacc的语法适用于flex和bison，之后的博客内容将不区分<code>flex</code>和<code>lex</code>，<code>bison</code>和yacc。</p>
-<p>本文所有的代码都在<code>kali2019</code>运行测试过，没有linux基础的读者可以安装<code>Ubuntu</code>系列linux。</p>
+<p>本文所有的代码都在<code>kali2019</code>运行测试过，没有linux基础的读者可以安装<code>Ubuntu</code>系列linux，推荐ubuntu16和ubuntu18。</p>
 <p><a href="http://www.cppblog.com/woaidongmao/archive/2008/09/20/62322.aspx" target="_blank" rel="noopener">原博客指路</a></p>
-<h2 id="初识lex"><a href="#初识lex" class="headerlink" title="初识lex"></a>初识lex</h2><p>在开始之前，你需要拥有一个装有<code>flex</code>和<code>bison</code>的操作系统。</p>
-<p>Lex(Lexical Analyzar 词法分析生成器)，Yacc(Yet Another Compiler Compiler编译器代码生成器)是Unix下十分重要的词法分析，语法分析的工具。经常用于语言分析，公式编译等广泛领域。遗憾的是网上中文资料介绍不是过于简单，就是跳跃太大，入门参考意义并不大。本文通过循序渐进的例子，从0开始了解掌握Lex和Yacc的用法。</p>
-<h2 id="lex初步示例"><a href="#lex初步示例" class="headerlink" title="lex初步示例"></a>lex初步示例</h2><p>一个简单的lex文件: example1.l</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;%</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"stdio.h"</span></span></span><br><span class="line">%&#125;</span><br><span class="line"></span><br><span class="line">%%</span><br><span class="line"></span><br><span class="line">[\n]                  ;</span><br><span class="line">[<span class="number">0</span><span class="number">-9</span>]+                <span class="built_in">printf</span>(<span class="string">"Int     : %s\n"</span>,yytext);</span><br><span class="line">[<span class="number">0</span><span class="number">-9</span>]*\.[<span class="number">0</span><span class="number">-9</span>]+        <span class="built_in">printf</span>(<span class="string">"Float   : %s\n"</span>,yytext);</span><br><span class="line">[a-zA-Z][a-zA-Z0<span class="number">-9</span>]*  <span class="built_in">printf</span>(<span class="string">"Var     : %s\n"</span>,yytext);</span><br><span class="line">[\+\-\*\/\%]          <span class="built_in">printf</span>(<span class="string">"Op      : %s\n"</span>,yytext);</span><br><span class="line">.                     <span class="built_in">printf</span>(<span class="string">"Unknown : %c\n"</span>,yytext[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">%%</span><br></pre></td></tr></table></figure>
-<p>在命令行下执行命令</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> flex解析，会自动生成lex.yy.c文件</span><br><span class="line">flex example1.l</span><br><span class="line"><span class="meta">#</span>进行编译生成parser可执行程序</span><br><span class="line">cc -o parser lex.yy.cc -ll</span><br><span class="line"><span class="meta">#</span> 如果不加-ll链结选项，cc编译时会出现以下错误，后面会进一步说明。</span><br></pre></td></tr></table></figure>
-
-          
+<p><a href="https://github.com/desperadoccy/flex-bison" target="_blank" rel="noopener">文章代码示例</a></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/12/27/flex-bison/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
