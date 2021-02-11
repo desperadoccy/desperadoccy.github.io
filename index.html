@@ -304,6 +304,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://desperadoccy.github.io/2021/02/11/javap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="desperadoccy">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/favicon.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="desperadoccy的小窝">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/02/11/javap/" itemprop="url">javap反编译命令详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-11T23:40:07+08:00">
+                2021-02-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>javap是jvm自带的一个工具，主要用于反编译Java的class文件，比idea自带的反编译更加细致（我没有仔细研究过idea的反编译设置，默认的idea反编译比较简洁，无法查看语法糖实现细节），可以查看生成的字节码。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/02/11/javap/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+  <div>
+      
+  </div>
+  
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://desperadoccy.github.io/2021/02/05/javaNativeMethod/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -400,7 +550,8 @@
 <blockquote>
 <p>“A native method is a Java method whose implementation is provided by non-java code.”</p>
 </blockquote>
-<p>在定义一个native method时，并不提供实现体，例如：</p>
+<p>在定义一个native method时，并不提供实现体，我们以<code>java.lang.Object</code>为例，其类中有很多native方法，如<code>getClass</code>,<code>hashCode</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Object</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">registerNatives</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        registerNatives();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> Class&lt;?&gt; getClass();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">this</span> == obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">native</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> getClass().getName() + <span class="string">"@"</span> + Integer.toHexString(hashCode());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">notify</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">notifyAll</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout, <span class="keyword">int</span> nanos)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (timeout &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"timeout value is negative"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &lt; <span class="number">0</span> || nanos &gt; <span class="number">999999</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                                <span class="string">"nanosecond timeout value out of range"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            timeout++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        wait(timeout);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        wait(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2021/02/05/javaNativeMethod/#more" rel="contents">
@@ -1703,323 +1854,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://desperadoccy.github.io/2020/05/26/http-header/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="desperadoccy">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/favicon.ico">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="desperadoccy的小窝">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/26/http-header/" itemprop="url">http消息头说明</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-26T14:28:15+08:00">
-                2020-05-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index">
-                    <span itemprop="name">CTF</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/web/" itemprop="url" rel="index">
-                    <span itemprop="name">web</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <table>
-<thead>
-<tr>
-<th>Header</th>
-<th>解释</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Accept</td>
-<td>指定客户端能够接收的内容类型</td>
-<td>Accept: text/plain, text/html,application/json</td>
-</tr>
-<tr>
-<td>Accept-Charset</td>
-<td>浏览器可以接受的字符编码集。</td>
-<td>Accept-Charset: iso-8859-5</td>
-</tr>
-<tr>
-<td>Accept-Encoding</td>
-<td>指定浏览器可以支持的web服务器返回内容压缩编码类型。</td>
-<td>Accept-Encoding: compress, gzip</td>
-</tr>
-<tr>
-<td>Accept-Language</td>
-<td>浏览器可接受的语言</td>
-<td>Accept-Language: en,zh</td>
-</tr>
-<tr>
-<td>Accept-Ranges</td>
-<td>可以请求网页实体的一个或者多个子范围字段</td>
-<td>Accept-Ranges: bytes</td>
-</tr>
-<tr>
-<td>Authorization</td>
-<td>HTTP授权的授权证书</td>
-<td>Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</td>
-</tr>
-<tr>
-<td>Cache-Control</td>
-<td>指定请求和响应遵循的缓存机制</td>
-<td>Cache-Control: no-cache</td>
-</tr>
-<tr>
-<td>Connection</td>
-<td>表示是否需要持久连接。（HTTP 1.1默认进行持久连接）</td>
-<td>Connection: close</td>
-</tr>
-<tr>
-<td>Cookie</td>
-<td>HTTP请求发送时，会把保存在该请求域名下的所有cookie值一起发送给web服务器。</td>
-<td>Cookie: $Version=1; Skin=new;</td>
-</tr>
-<tr>
-<td>Content-Length</td>
-<td>请求的内容长度</td>
-<td>Content-Length: 348</td>
-</tr>
-<tr>
-<td>Content-Type</td>
-<td>请求的与实体对应的MIME信息</td>
-<td>Content-Type: application/x-www-form-urlencoded</td>
-</tr>
-<tr>
-<td>Date</td>
-<td>请求发送的日期和时间</td>
-<td>Date: Tue, 15 Nov 2010 08:12:31 GMT</td>
-</tr>
-<tr>
-<td>Expect</td>
-<td>请求的特定的服务器行为</td>
-<td>Expect: 100-continue</td>
-</tr>
-<tr>
-<td>From</td>
-<td>发出请求的用户的Email</td>
-<td>From: <a href="mailto:user@email.com" target="_blank" rel="noopener">user@email.com</a></td>
-</tr>
-<tr>
-<td>Host</td>
-<td>指定请求的服务器的域名和端口号</td>
-<td>Host: <a href="http://www.zcmhi.com" target="_blank" rel="noopener">www.zcmhi.com</a></td>
-</tr>
-<tr>
-<td>If-Match</td>
-<td>只有请求内容与实体相匹配才有效</td>
-<td>If-Match: “737060cd8c284d8af7ad3082f209582d”</td>
-</tr>
-<tr>
-<td>If-Modified-Since</td>
-<td>如果请求的部分在指定时间之后被修改则请求成功，未被修改则返回304代码</td>
-<td>If-Modified-Since: Sat, 29 Oct 2010 19:43:31 GMT</td>
-</tr>
-<tr>
-<td>If-None-Match</td>
-<td>如果内容未改变返回304代码，参数为服务器先前发送的Etag，与服务器回应的Etag比较判断是否改变</td>
-<td>If-None-Match: “737060cd8c284d8af7ad3082f209582d”</td>
-</tr>
-<tr>
-<td>If-Range</td>
-<td>如果实体未改变，服务器发送客户端丢失的部分，否则发送整个实体。参数也为Etag</td>
-<td>If-Range: “737060cd8c284d8af7ad3082f209582d”</td>
-</tr>
-<tr>
-<td>If-Unmodified-Since</td>
-<td>只在实体在指定时间之后未被修改才请求成功</td>
-<td>If-Unmodified-Since: Sat, 29 Oct 2010 19:43:31 GMT</td>
-</tr>
-<tr>
-<td>Max-Forwards</td>
-<td>限制信息通过代理和网关传送的时间</td>
-<td>Max-Forwards: 10</td>
-</tr>
-<tr>
-<td>Pragma</td>
-<td>用来包含实现特定的指令</td>
-<td>Pragma: no-cache</td>
-</tr>
-<tr>
-<td>Proxy-Authorization</td>
-<td>连接到代理的授权证书</td>
-<td>Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</td>
-</tr>
-<tr>
-<td>Range</td>
-<td>只请求实体的一部分，指定范围</td>
-<td>Range: bytes=500-999</td>
-</tr>
-<tr>
-<td>Referer</td>
-<td>先前网页的地址，当前请求网页紧随其后,即来路</td>
-<td>Referer: <a href="http://www.zcmhi.com/archives…" target="_blank" rel="noopener">http://www.zcmhi.com/archives…</a></td>
-</tr>
-<tr>
-<td>TE</td>
-<td>客户端愿意接受的传输编码，并通知服务器接受接受尾加头信息</td>
-<td>TE: trailers,deflate;q=0.5</td>
-</tr>
-<tr>
-<td>Upgrade</td>
-<td>向服务器指定某种传输协议以便服务器进行转换（如果支持）</td>
-<td>Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11</td>
-</tr>
-<tr>
-<td>User-Agent</td>
-<td>User-Agent的内容包含发出请求的用户信息</td>
-<td>User-Agent: Mozilla/5.0 (Linux; X11)</td>
-</tr>
-<tr>
-<td>Via</td>
-<td>通知中间网关或代理服务器地址，通信协议</td>
-<td>Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)</td>
-</tr>
-<tr>
-<td>Warning</td>
-<td>关于消息实体的警告信息</td>
-<td>Warn: 199 Miscellaneous warning</td>
-</tr>
-</tbody>
-</table>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-  <div>
-      
-  </div>
-  
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2072,7 +1906,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">64</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
