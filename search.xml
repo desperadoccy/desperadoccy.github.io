@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>java Enum语法糖</title>
+    <url>/2021/02/12/javaEnum/</url>
+    <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>一直对Enum的实现原理有困惑，所以最近专门去查了查，了解到了Java的12个语法糖，决定依次学习记录一下。</p>
+<a id="more"></a>
+<h2 id="Enum示例"><a href="#Enum示例" class="headerlink" title="Enum示例"></a>Enum示例</h2><p>我们先写个简单的Enum的java程序并编译一下。</p>
+<pre><code class="java">
+</code></pre>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>javap反编译命令详解</title>
     <url>/2021/02/11/javap/</url>
     <content><![CDATA[<p>javap是jvm自带的一个工具，主要用于反编译Java的class文件，比idea自带的反编译更加细致（我没有仔细研究过idea的反编译设置，默认的idea反编译比较简洁，无法查看语法糖实现细节），可以查看生成的字节码。</p>
