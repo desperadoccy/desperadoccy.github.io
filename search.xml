@@ -6,7 +6,7 @@
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>jdk1.8源码读解（－）—— ArrayList</title>
+    <title>jdk1.8源码读解（一）—— ArrayList</title>
     <url>/2021/03/22/jdk1-8source/</url>
     <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>看书、看博客永远是看别人替你总结的东西，想根本弄懂Java我觉得还是要看完Java的源码。jdk是比较经典的一个Java版本，Oracle在该版本加入lambda表达式、新日期API和溢出hotspot永生代很多功能，因此选择该版本作为阅读版本。</p>
 <p>为减少篇幅，并没有把所有代码全部粘贴至文中，但是会尽力介绍到每一个方法。</p>

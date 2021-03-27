@@ -84,15 +84,15 @@
 <meta name="description" content="写在前面看书、看博客永远是看别人替你总结的东西，想根本弄懂Java我觉得还是要看完Java的源码。jdk是比较经典的一个Java版本，Oracle在该版本加入lambda表达式、新日期API和溢出hotspot永生代很多功能，因此选择该版本作为阅读版本。 为减少篇幅，并没有把所有代码全部粘贴至文中，但是会尽力介绍到每一个方法。 概要我们从rt.jar包中最常用的数据结构类开始分析，rt全称runt">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jdk1.8源码读解（－）—— ArrayList">
+<meta property="og:title" content="jdk1.8源码读解（一）—— ArrayList">
 <meta property="og:url" content="https://desperadoccy.github.io/2021/03/22/jdk1-8source/index.html">
 <meta property="og:site_name" content="desperadoccy的小窝">
 <meta property="og:description" content="写在前面看书、看博客永远是看别人替你总结的东西，想根本弄懂Java我觉得还是要看完Java的源码。jdk是比较经典的一个Java版本，Oracle在该版本加入lambda表达式、新日期API和溢出hotspot永生代很多功能，因此选择该版本作为阅读版本。 为减少篇幅，并没有把所有代码全部粘贴至文中，但是会尽力介绍到每一个方法。 概要我们从rt.jar包中最常用的数据结构类开始分析，rt全称runt">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://desperadoccy.github.io/2021/03/22/jdk1-8source/1.png">
-<meta property="og:updated_time" content="2021-03-27T12:39:30.936Z">
+<meta property="og:updated_time" content="2021-03-27T12:43:58.777Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jdk1.8源码读解（－）—— ArrayList">
+<meta name="twitter:title" content="jdk1.8源码读解（一）—— ArrayList">
 <meta name="twitter:description" content="写在前面看书、看博客永远是看别人替你总结的东西，想根本弄懂Java我觉得还是要看完Java的源码。jdk是比较经典的一个Java版本，Oracle在该版本加入lambda表达式、新日期API和溢出hotspot永生代很多功能，因此选择该版本作为阅读版本。 为减少篇幅，并没有把所有代码全部粘贴至文中，但是会尽力介绍到每一个方法。 概要我们从rt.jar包中最常用的数据结构类开始分析，rt全称runt">
 <meta name="twitter:image" content="https://desperadoccy.github.io/2021/03/22/jdk1-8source/1.png">
 
@@ -130,7 +130,7 @@
 
 
 
-  <title>jdk1.8源码读解（－）—— ArrayList | desperadoccy的小窝</title>
+  <title>jdk1.8源码读解（一）—— ArrayList | desperadoccy的小窝</title>
   
 
 
@@ -326,7 +326,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">jdk1.8源码读解（－）—— ArrayList</h1>
+          <h1 class="post-title" itemprop="name headline">jdk1.8源码读解（一）—— ArrayList</h1>
         
 
         <div class="post-meta">
