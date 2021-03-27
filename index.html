@@ -306,6 +306,129 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://desperadoccy.github.io/2021/03/27/jdk1-8source2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="desperadoccy">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/favicon.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="desperadoccy的小窝">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/03/27/jdk1-8source2/" itemprop="url">jdk1-8source2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-03-27T20:14:49+08:00">
+                2021-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+  <div>
+      
+  </div>
+  
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://desperadoccy.github.io/2021/03/22/jdk1-8source/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -398,13 +521,20 @@
 
       
         
-          
-            <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>看书、看博客永远是看别人替你总结的东西，想根本弄懂Java我觉得还是要看完Java的源码。jdk是比较经典的一个Java版本，Oracle在该版本加入lambda表达式、新日期API和溢出hotspot永生代很多功能，因此选择该版本作为阅读版本。</p>
-<h2 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h2><p>我们从rt.jar包中最常用的数据结构类开始分析，rt全称runtime，是java的核心jar包。</p>
-<p>ArrayList位于<code>java.util</code>包下，先看一下它的关系图</p>
+          <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>看书、看博客永远是看别人替你总结的东西，想根本弄懂Java我觉得还是要看完Java的源码。jdk是比较经典的一个Java版本，Oracle在该版本加入lambda表达式、新日期API和溢出hotspot永生代很多功能，因此选择该版本作为阅读版本。</p>
+<p>为减少篇幅，并没有把所有代码全部粘贴至文中，但是会尽力介绍到每一个方法。</p>
+<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>我们从rt.jar包中最常用的数据结构类开始分析，rt全称runtime，是java的核心jar包。</p>
+<p><code>ArrayList</code>底层是数组队列，相当于动态数组。与 Java 中的数组相比，它的容量能动态增长。在添加大量元素前，应用程序可以使用ensureCapacity操作来增加 ArrayList 实例的容量。这可以减少递增式再分配的数量。它是线程不安全的，允许元素为null。</p>
+<p><code>ArrayList</code>位于<code>java.util</code>包下，先看一下它的关系图</p>
 <p><img src="/2021/03/22/jdk1-8source/1.png" alt="test"></p>
-
-          
+<p><code>ArrayList</code>继承自<code>AbstractList</code>类，并且实现了<code>RandomAccess</code>，<code>Cloneable</code>，<code>Serializable</code> 和 <code>List</code>接口，即支持随机访问，克隆，序列化。<br>如果深入查看，会发现<code>RandomAccess</code>，<code>Cloneable</code>，<code>Serializable</code>这三个都是空接口，没有指定任何方法，这样的接口叫<code>标识接口</code>，主要作用是为了标识，表明该类实现了哪些功能。这样做的好处是其他方法调用该类对象时，直接查看该类有实现某些接口来做些判断。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/03/22/jdk1-8source/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1670,156 +1800,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://desperadoccy.github.io/2020/12/17/software-list/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="desperadoccy">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/favicon.ico">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="desperadoccy的小窝">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/12/17/software-list/" itemprop="url">软件列表</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-12-17T20:50:37+08:00">
-                2020-12-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/other/" itemprop="url" rel="index">
-                    <span itemprop="name">other</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>电脑总是需要更新换代,每次换新软件都得重新安装,所以打算在此记下一些相关软件</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/12/17/software-list/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-  <div>
-      
-  </div>
-  
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1872,7 +1852,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-count">69</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
