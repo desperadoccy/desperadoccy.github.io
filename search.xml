@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>jdk1-8source2</title>
+    <title>jdk1.8源码读解（三）—— HashMap</title>
+    <url>/2021/03/28/jdk1-8source3/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>Java</category>
+        <category>源码解读</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>源码解读</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>jdk1.8源码读解（二）—— ArrayList的内部类</title>
     <url>/2021/03/27/jdk1-8source2/</url>
     <content><![CDATA[]]></content>
+      <categories>
+        <category>Java</category>
+        <category>源码解读</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>源码解读</tag>
+      </tags>
   </entry>
   <entry>
     <title>jdk1.8源码读解（一）—— ArrayList</title>
@@ -68,9 +89,11 @@
 ]]></content>
       <categories>
         <category>Java</category>
+        <category>源码解读</category>
       </categories>
       <tags>
         <tag>Java</tag>
+        <tag>源码解读</tag>
       </tags>
   </entry>
   <entry>
@@ -2249,8 +2272,8 @@
         <category>algorithm</category>
       </categories>
       <tags>
-        <tag>CSP</tag>
         <tag>algorithm</tag>
+        <tag>CSP</tag>
       </tags>
   </entry>
   <entry>

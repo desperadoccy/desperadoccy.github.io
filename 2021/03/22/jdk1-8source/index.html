@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java,">
+  <meta name="keywords" content="Java,源码解读,">
 
 
 
@@ -82,7 +82,7 @@
 
 
 <meta name="description" content="写在前面看书、看博客永远是看别人替你总结的东西，想根本弄懂Java我觉得还是要看完Java的源码。jdk是比较经典的一个Java版本，Oracle在该版本加入lambda表达式、新日期API和溢出hotspot永生代很多功能，因此选择该版本作为阅读版本。 为减少篇幅，并没有把所有代码全部粘贴至文中，但是会尽力介绍到每一个方法。 概要我们从rt.jar包中最常用的数据结构类开始分析，rt全称runt">
-<meta name="keywords" content="Java">
+<meta name="keywords" content="Java,源码解读">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jdk1.8源码读解（一）—— ArrayList">
 <meta property="og:url" content="https://desperadoccy.github.io/2021/03/22/jdk1-8source/index.html">
@@ -90,7 +90,7 @@
 <meta property="og:description" content="写在前面看书、看博客永远是看别人替你总结的东西，想根本弄懂Java我觉得还是要看完Java的源码。jdk是比较经典的一个Java版本，Oracle在该版本加入lambda表达式、新日期API和溢出hotspot永生代很多功能，因此选择该版本作为阅读版本。 为减少篇幅，并没有把所有代码全部粘贴至文中，但是会尽力介绍到每一个方法。 概要我们从rt.jar包中最常用的数据结构类开始分析，rt全称runt">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://desperadoccy.github.io/2021/03/22/jdk1-8source/1.png">
-<meta property="og:updated_time" content="2021-03-27T12:43:58.777Z">
+<meta property="og:updated_time" content="2021-03-28T06:35:34.573Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jdk1.8源码读解（一）—— ArrayList">
 <meta name="twitter:description" content="写在前面看书、看博客永远是看别人替你总结的东西，想根本弄懂Java我觉得还是要看完Java的源码。jdk是比较经典的一个Java版本，Oracle在该版本加入lambda表达式、新日期API和溢出hotspot永生代很多功能，因此选择该版本作为阅读版本。 为减少篇幅，并没有把所有代码全部粘贴至文中，但是会尽力介绍到每一个方法。 概要我们从rt.jar包中最常用的数据结构类开始分析，rt全称runt">
@@ -368,6 +368,17 @@
 
                 
                 
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码解读/" itemprop="url" rel="index">
+                    <span itemprop="name">源码解读</span>
+                  </a>
+                </span>
+
+                
+                
               
             </span>
           
@@ -485,6 +496,8 @@
           
             <a href="/tags/Java/" rel="tag"># Java</a>
           
+            <a href="/tags/源码解读/" rel="tag"># 源码解读</a>
+          
         </div>
       
 
@@ -506,8 +519,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2021/03/27/jdk1-8source2/" rel="prev" title="jdk1-8source2">
-                jdk1-8source2 <i class="fa fa-chevron-right"></i>
+              <a href="/2021/03/27/jdk1-8source2/" rel="prev" title="jdk1.8源码读解（二）—— ArrayList的内部类">
+                jdk1.8源码读解（二）—— ArrayList的内部类 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -587,7 +600,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -598,7 +611,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -609,7 +622,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

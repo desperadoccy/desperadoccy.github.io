@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Java,源码解读,">
 
 
 
@@ -82,15 +82,16 @@
 
 
 <meta name="description" content="desperado个人博客，一个瞎学的软工狗。">
+<meta name="keywords" content="Java,源码解读">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jdk1-8source2">
+<meta property="og:title" content="jdk1.8源码读解（二）—— ArrayList的内部类">
 <meta property="og:url" content="https://desperadoccy.github.io/2021/03/27/jdk1-8source2/index.html">
 <meta property="og:site_name" content="desperadoccy的小窝">
 <meta property="og:description" content="desperado个人博客，一个瞎学的软工狗。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-03-27T12:14:49.572Z">
+<meta property="og:updated_time" content="2021-03-28T06:35:33.616Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jdk1-8source2">
+<meta name="twitter:title" content="jdk1.8源码读解（二）—— ArrayList的内部类">
 <meta name="twitter:description" content="desperado个人博客，一个瞎学的软工狗。">
 
 
@@ -127,7 +128,7 @@
 
 
 
-  <title>jdk1-8source2 | desperadoccy的小窝</title>
+  <title>jdk1.8源码读解（二）—— ArrayList的内部类 | desperadoccy的小窝</title>
   
 
 
@@ -323,7 +324,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">jdk1-8source2</h1>
+          <h1 class="post-title" itemprop="name headline">jdk1.8源码读解（二）—— ArrayList的内部类</h1>
         
 
         <div class="post-meta">
@@ -345,6 +346,39 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/源码解读/" itemprop="url" rel="index">
+                    <span itemprop="name">源码解读</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -399,6 +433,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/源码解读/" rel="tag"># 源码解读</a>
+          
+        </div>
+      
 
       
       
@@ -417,6 +459,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/28/jdk1-8source3/" rel="prev" title="jdk1.8源码读解（三）—— HashMap">
+                jdk1.8源码读解（三）—— HashMap <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -486,7 +532,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -497,7 +543,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -508,7 +554,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
