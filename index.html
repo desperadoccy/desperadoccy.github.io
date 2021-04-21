@@ -721,7 +721,7 @@
 
       
         
-          <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>看书、看博客永远是看别人替你总结的东西，想根本弄懂Java我觉得还是要看完Java的源码。jdk是比较经典的一个Java版本，Oracle在该版本加入lambda表达式、新日期API和溢出hotspot永生代很多功能，因此选择该版本作为阅读版本。</p>
+          <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>看书、看博客永远是看别人替你总结的东西，想根本弄懂Java我觉得还是要看完Java的源码。jdk1.8是比较经典的一个Java版本，Oracle在该版本加入lambda表达式、新日期API和溢出hotspot永生代很多功能，因此选择该版本作为阅读版本。</p>
 <p>为减少篇幅，并没有把所有代码全部粘贴至文中，但是会尽力介绍到每一个方法。</p>
 <h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>我们从rt.jar包中最常用的数据结构类开始分析，rt全称runtime，是java的核心jar包。</p>
 <p><code>ArrayList</code>底层是数组队列，相当于动态数组。与 Java 中的数组相比，它的容量能动态增长。在添加大量元素前，应用程序可以使用ensureCapacity操作来增加 ArrayList 实例的容量。这可以减少递增式再分配的数量。它是线程不安全的，允许元素为null。</p>
