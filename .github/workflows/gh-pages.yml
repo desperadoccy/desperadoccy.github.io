@@ -1,0 +1,47 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install dependencies
+        run: |
+          bundle config set path 'vendor/bundle'
+          bundle install --jobs 4 --retry 3
+
+      - name: Build Jekyll site
+        run: |
+          # If your generated site already exists under html_source_file, skip jekyll build
+          if [ -d "html_source_file" ]; then
+            echo "Using pre-generated site in html_source_file"
+          else
+            bundle exec jekyll build --destination _site
+            # if Jekyll output is in html_source_file in this project, move it
+            if [ -d "_site" ]; then
+              mv _site html_source_file
+            fi
+          fi
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./html_source_file
+          publish_branch: gh-pages
+          keep_files: false
