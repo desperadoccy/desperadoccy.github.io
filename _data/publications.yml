@@ -1,22 +1,34 @@
 main:
-
   - title: Towards Efficient and Scalable Asynchronous Federated Learning Via Stragglers Version Control
-    authors: <strong>Chuyi Chen</strong>, Yanchao Zhao* (*Corresponding authors), Zhe Zhang, Wenzhong Li, Jie Wu
+    authors: <strong>Chuyi Chen</strong>, Yanchao Zhao, Zhe Zhang, Wenzhong Li, Jie Wu
     conference_short: TMC
-    conference: IEEE Transactions on Mobile Computing
+    conference: IEEE Transactions on Mobile Computing, 2025/09/04
     pdf: https://arxiv.org/pdf/2306.00988.pdf
-    code: https://github.com/MrGiovanni/ContinualLearning
+    code: https://github.com/NUAA-SmartSensing/DVAFL
     bibtex: https://bib.yliu.me/MICCAI23.txt
     image: ./assets/img/teaser_example_2.png
     notes: Early Accept
+
+  - title: "Energy Efficient and Low Latency Federated Distillation Over UAV-Assisted Wireless Networks"
+    authors: Zhe Zhang, Yanchao Zhao, <strong>Chuyi Chen</strong>, Kun Zhu, Dusit Niyato
+    conference_short: IWQoS
+    conference: IEEE/ACM International Symposium on Quality of Service, 2024
+    pdf: https://arxiv.org/pdf/2002.10211.pdf
+    bibtex: https://class-il.mpi-inf.mpg.de/mnemonics/
+    image: ./assets/img/teaser_example.png
+  
+  - title: "FedModule: A Modular Federated Learning Framework"
+    authors: <strong>Chuyi Chen</strong>, Zhe Zhang, Yanchao Zhao
+    conference_short: arxiv
+    conference: arxiv:2409.04849
+    pdf: https://arxiv.org/abs/2409.04849
+    code: https://github.com/NUAA-SmartSensing/FedModule
 
   - title: "Leave No One Behind: Unleashing Stragglers’ Potential for Accurate and Realtime Asynchronous Federated Learning"
     authors: <strong>Chuyi Chen</strong>, Yanchao Zhao, Zhe Zhang
     conference_short: IWQoS
     conference: IEEE/ACM International Symposium on Quality of Service, 2024
     pdf: https://arxiv.org/pdf/2002.10211.pdf
-    code: https://github.com/yaoyao-liu/class-incremental-learning/tree/main/mnemonics-training
-    page: https://class-il.mpi-inf.mpg.de/mnemonics/
+    code: https://github.com/NUAA-SmartSensing/FedVDA
     bibtex: https://class-il.mpi-inf.mpg.de/mnemonics/
-    notes: Oral Presentation
     image: ./assets/img/teaser_example.png
