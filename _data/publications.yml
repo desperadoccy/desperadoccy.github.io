@@ -6,7 +6,7 @@ main:
     pdf: https://arxiv.org/pdf/2306.00988.pdf
     code: https://github.com/NUAA-SmartSensing/DVAFL
     bibtex: https://bib.yliu.me/MICCAI23.txt
-    image: ./assets/img/teaser_example_2.png
+    image: ./assets/img/journal.png
     notes: Early Accept
 
   - title: "Energy Efficient and Low Latency Federated Distillation Over UAV-Assisted Wireless Networks"
@@ -15,7 +15,7 @@ main:
     conference: IEEE/ACM International Symposium on Quality of Service, 2024
     pdf: https://arxiv.org/pdf/2002.10211.pdf
     bibtex: https://class-il.mpi-inf.mpg.de/mnemonics/
-    image: ./assets/img/teaser_example.png
+    image: ./assets/img/journal.png
   
   - title: "FedModule: A Modular Federated Learning Framework"
     authors: <strong>Chuyi Chen</strong>, Zhe Zhang, Yanchao Zhao
@@ -23,6 +23,7 @@ main:
     conference: arxiv:2409.04849
     pdf: https://arxiv.org/abs/2409.04849
     code: https://github.com/NUAA-SmartSensing/FedModule
+    image: ./assets/img/fedmoudle.pdf
 
   - title: "Leave No One Behind: Unleashing Stragglers’ Potential for Accurate and Realtime Asynchronous Federated Learning"
     authors: <strong>Chuyi Chen</strong>, Yanchao Zhao, Zhe Zhang
@@ -31,4 +32,4 @@ main:
     pdf: https://arxiv.org/pdf/2002.10211.pdf
     code: https://github.com/NUAA-SmartSensing/FedVDA
     bibtex: https://class-il.mpi-inf.mpg.de/mnemonics/
-    image: ./assets/img/teaser_example.png
+    image: ./assets/img/conference.png
