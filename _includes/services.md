@@ -11,6 +11,5 @@
 <h4 style="margin:0 10px 0;">Journal Reviewers</h4>
 
 <ul style="margin:0 0 20px;">
-  <!-- <li><a href="https://www.computer.org/csdl/journal/tp"><autocolor>IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)</autocolor></a></li> -->
   <li><a href="https://www.google.com.hk/url?sa=t&source=web&rct=j&opi=89978449&url=https://ieeexplore.ieee.org/xpl/RecentIssue.jsp%3Fpunumber%3D7755&ved=2ahUKEwi69pzo1t-QAxVTdPUHHZckHkYQFnoECBUQAQ&usg=AOvVaw3Ax7Q_Xn3Eixghe8lNFU08"><autocolor>IEEE Transactions on Mobile Computing (TMC)</autocolor></a></li>
 </ul>
