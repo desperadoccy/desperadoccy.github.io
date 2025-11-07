@@ -20,7 +20,7 @@ main:
     conference: arxiv:2409.04849
     pdf: https://arxiv.org/abs/2409.04849
     code: https://github.com/NUAA-SmartSensing/FedModule
-    image: ./assets/img/fedmoudle.png
+    image: ./assets/img/fedmodule.png
 
   - title: "Leave No One Behind: Unleashing Stragglers’ Potential for Accurate and Realtime Asynchronous Federated Learning"
     authors: <strong>Chuyi Chen</strong>, Yanchao Zhao, Zhe Zhang
