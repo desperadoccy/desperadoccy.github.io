@@ -5,16 +5,13 @@ main:
     conference: IEEE Transactions on Mobile Computing, 2025/09/04
     pdf: https://arxiv.org/pdf/2306.00988.pdf
     code: https://github.com/NUAA-SmartSensing/DVAFL
-    bibtex: https://bib.yliu.me/MICCAI23.txt
     image: ./assets/img/journal.png
     notes: Early Accept
 
   - title: "Energy Efficient and Low Latency Federated Distillation Over UAV-Assisted Wireless Networks"
     authors: Zhe Zhang, Yanchao Zhao, <strong>Chuyi Chen</strong>, Kun Zhu, Dusit Niyato
-    conference_short: IWQoS
-    conference: IEEE/ACM International Symposium on Quality of Service, 2024
-    pdf: https://arxiv.org/pdf/2002.10211.pdf
-    bibtex: https://class-il.mpi-inf.mpg.de/mnemonics/
+    conference_short: TWC
+    conference: IEEE Transactions on Wireless Communications, 2025
     image: ./assets/img/journal.png
   
   - title: "FedModule: A Modular Federated Learning Framework"
@@ -29,7 +26,5 @@ main:
     authors: <strong>Chuyi Chen</strong>, Yanchao Zhao, Zhe Zhang
     conference_short: IWQoS
     conference: IEEE/ACM International Symposium on Quality of Service, 2024
-    pdf: https://arxiv.org/pdf/2002.10211.pdf
     code: https://github.com/NUAA-SmartSensing/FedVDA
-    bibtex: https://class-il.mpi-inf.mpg.de/mnemonics/
     image: ./assets/img/conference.png
