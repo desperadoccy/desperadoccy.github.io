@@ -3,7 +3,7 @@ main:
     authors: <strong>Chuyi Chen</strong>, Yanchao Zhao, Zhe Zhang, Wenzhong Li, Jie Wu
     conference_short: TMC
     conference: IEEE Transactions on Mobile Computing, 2025/09/04
-    pdf: https://arxiv.org/pdf/2306.00988.pdf
+    pdf: https://ieeexplore.ieee.org/abstract/document/11162622
     code: https://github.com/NUAA-SmartSensing/DVAFL
     image: ./assets/img/journal.png
     notes: Early Accept
